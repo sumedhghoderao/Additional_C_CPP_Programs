@@ -1,0 +1,104 @@
+#include<stdio.h>
+void accept(int a[10],int n);
+void display(int a[10],int n);
+void quicksort(int a[10],int low,int high,int n);
+int partition(int a[10],int low, int high);
+void main()
+{
+  int ch,n,a[10];
+  do
+  {
+    printf("\n******ENTER YOUR CHOICE********\n1.Accept\n2.Display\n3.Quick sort\n4.Exit");
+    scanf("%d",&ch);
+    
+    switch(ch)
+    {
+      case 1:printf("\nEnter the no of elements\n");
+                  scanf("%d",&n);
+                  
+                  printf("\nEnter the elements");
+                  accept(a,n);
+                  break;
+                 
+         case 2:printf("Array=");
+                     display(a,n);
+                     break;
+                     
+          case 3:quicksort(a,0,n-1,n);
+                      printf("\nThe sorted array=");
+                      display(a,n);
+                      break;
+                      
+          case 4:printf("\nExit");
+                      break;
+                      
+     }
+     }
+     while(ch!=4);
+}     
+
+void accept(int a[10],int n)
+{
+int i;
+for(i=0;i<n;i++)
+{
+scanf("%d",&a[i]);
+}
+}
+
+void display(int a[10],int n)
+{
+int i;
+for(i=0;i<n;i++)
+{
+printf(" %d",a[i]);
+}
+}       
+ 
+ int partition(int a[10],int low,int high)
+{
+int i,j,pivot,temp;
+pivot=low;
+i=low+1;
+j=high;
+
+printf("\nPivot=%d\nLow=%d\nHigh=%d\n\n",a[pivot],low,high);
+
+
+while(i<=j)
+{
+while(a[i]<=a[pivot])
+i++;
+
+while(a[j]>a[pivot])
+j--;
+
+if(i<j)
+{
+temp=a[i];
+a[i]=a[j];
+a[j]=temp;
+
+}
+}
+temp=a[j];
+a[j]=a[pivot];
+a[pivot]=temp;
+
+
+
+return j;
+}
+
+void quicksort(int a[10],int low,int high,int n)
+{
+ int res;
+ if(low<high)
+ {
+   res=partition(a,low,high);
+   printf("\nAfter every pass:");
+   display(a,n);
+   quicksort(a,low,res-1,n);
+   quicksort(a,res+1,high,n);
+  }
+ }
