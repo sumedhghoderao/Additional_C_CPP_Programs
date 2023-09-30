@@ -1,0 +1,198 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+   int data;
+   struct node*next;
+}node;
+
+node*create();
+void display(node*head);
+node*insert_beg(node*head);
+void insert_last(node*head);
+void insert_inbet(node*head);
+node*delete_front(node*head);
+void delete_last(node*head);
+void delete_inbet(node*head);
+void main()
+{
+int ch;
+   node* head=NULL;
+do
+{
+printf("\n******ENTER YOUR CHOICE******\n");
+  printf("\n1.Create a node\n2.Display a node\n3.Insert a node at begining\n4.Insert a node at last \n5.Insert a node in between a link\n6.Delete front node\n7.Delete last node \n8.Delete node inbetween\n9.Exit\n");
+  
+  scanf("%d",&ch);
+  switch(ch)
+  {
+  case 1:
+             head=create();
+  break;
+  case 2:
+             display(head);
+  break;
+  case 3:
+             head=insert_beg(head);
+             display(head);
+  break;
+  case 4:
+            insert_last(head);
+            display(head);
+  break;
+  case 5:
+            insert_inbet(head);
+            display(head);
+  break;
+  case 6:
+            head=delete_front(head);
+            display(head);         
+  break;
+  case 7:
+            delete_last(head);
+            display(head);
+  break;
+  case 8:
+            delete_inbet(head);
+            display(head);
+  break;
+  case 9:
+  break;
+  
+  }
+}while(ch!=9);
+
+}
+node*create()                    
+{ int n,i;
+node*p;
+node*head=NULL;
+node*last=NULL;
+printf("\n Enter the no of nodes\n");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+  {
+        p=(node*)malloc(sizeof(node));    
+        printf("\n Enter the value");
+        scanf("%d",&p->data);
+        p->next=NULL;
+          if(head==NULL)
+            {
+            last=p;
+            head=p;
+            }
+            
+        else
+               {
+               last->next=p;
+               last=p;
+               }
+     }return head;
+}
+
+void display(node*head)
+{
+  node*p;
+      for(p=head;p!=NULL;p=p->next)
+       {
+            printf("\t %d",p->data);
+        }
+}
+
+node*insert_beg(node*head)
+{
+  node*p;
+  p=(node*)malloc(sizeof(node));
+  printf("\n Enter the value of node which you want to insert at begining\n");
+  scanf("%d",&p->data);
+  p->next=NULL;
+  p->next=head;
+  head=p;
+  return head;
+}
+
+void insert_last(node*head)
+{
+
+node*p,*q;
+
+p=(node*)malloc(sizeof(node));
+printf("\n Enter the value of node which you want insert at last\n");
+scanf("%d",&p->data);
+p->next=NULL;
+  for(q=head;q->next!=NULL;q=q->next)
+   {
+
+   }
+q->next=p;
+
+}
+
+
+void insert_inbet(node*head)
+{
+int pos,i;
+node*p;
+node*q;
+p=(node*)malloc(sizeof(node));
+printf("\n Enter the value of node which you want insert inbetween\n");
+scanf("%d",&p->data);
+p->next=NULL;
+printf("\n Enter the position \n");
+scanf("%d",&pos);
+q=head;
+    for(i=1;i<pos-1;i++)
+      {
+        q=q->next;
+      }
+p->next=q->next;
+q->next=p;
+}
+
+node*delete_front(node*head)
+{
+node*p;
+p=head;
+head=head->next;
+free(p);
+printf("\n First node is deleted \n");
+return head;
+
+}
+
+void delete_last(node*head)
+{
+node*p;
+node*q;
+
+for(q=head;q->next->next!=NULL;q=q->next)
+    {
+  
+    }
+
+p=q->next;
+q->next=NULL;
+free(p);
+printf("\n Last node is deleted \n");
+
+}
+
+void delete_inbet(node*head)
+{
+int i,pos;
+node*p;
+node*q;
+printf("\n Enter the position where you want to insert node \n ");
+scanf("%d",&pos);
+q=head;
+
+    for(i=1;i<pos-1;i++)
+      {
+        q=q->next;
+      }
+
+	p=q->next;
+	q->next=p->next;
+	free(p);
+
+}
