@@ -1,0 +1,391 @@
+#include<stdio.h>
+void accept(int matrix[][10], int r, int c);
+void display(int matrix[][10],int r,int c);
+void addition(int matrix1[][10], int matrix2[][10], int r1, int r2, int c1, int c2);
+void multiplication(int matrix1[][10], int matrix2[][10], int r1, int r2, int c1, int c2);
+void transpose(int matrix[][10],int r,int c);
+void saddle_point(int matrix[][10],int r,int c);
+
+void ptr_accept(int *mat, int r, int c);
+void ptr_display(int *mat, int r, int c);
+void ptr_addition(int *mat1, int *mat2, int r1, int r2, int c1, int c2);
+void ptr_multiplication(int *mat1, int *mat2, int r1, int r2, int c1, int c2);
+void ptr_transpose(int *mat,int r,int c);
+
+void main()
+{
+int r1,r2,c1,c2,matrix1[10][10],matrix2[10][10],x=1,ch1,ch2,y;
+int *mat1,*mat2;
+
+mat1=matrix1;
+mat2=matrix2;
+
+printf("\nEnter the no. of rows of first matrix:-\n");
+scanf("%d", &r1);
+
+printf("\nEnter the no. of columns of first matrix:-\n");
+scanf("%d", &c1);
+
+ptr_accept(mat1,r1,c1);
+
+printf("\nEnter the no. of rows of second matrix:-\n");
+scanf("%d", &r2);
+
+printf("\nEnter the no. of columns of second matrix:-\n");
+scanf("%d", &c2);
+
+ptr_accept(mat2,r2,c2);
+
+while(x)
+{
+y=1;
+printf("Choose your method:-\n1-With Pointer \n2-Without Pointer \n3-Exit\n");
+scanf("%d", &ch1);
+	
+switch(ch1)
+{
+	case 1:
+	while(y)
+	{
+	printf("Enter your choice:-\n1-Addition \n2-Multiplication \n3-Transpose \n4-Exit\n");
+	scanf("%d", &ch2);
+	
+	switch(ch2)
+	{
+	case 1:
+		ptr_addition(mat1,mat2,r1,r2,c1,c2);
+		break;
+	case 2:
+		ptr_multiplication(mat1,mat2,r1,r2,c1,c2);
+		break;
+	case 3:
+		ptr_transpose(mat1,r1,c1);
+		break;
+	case 4:
+		y=0;
+		break;
+	default:
+		printf("Enter valid choice\n");
+		break;	
+	}
+	}
+	break;
+case 2:
+	while(y)
+	{
+	printf("Enter your choice:-\n1-Addition \n2-Multiplication \n3-Transpose \n4-Saddle point \n5-Exit\n");
+	scanf("%d", &ch2);
+	
+	switch(ch2)
+	{
+	case 1:
+		addition(matrix1,matrix2,r1,r2,c1,c2);
+		break;
+	case 2:
+		multiplication(matrix1,matrix2,r1,r2,c1,c2);
+		break;
+	case 3:		
+		transpose(matrix1,r1,c1);
+		break;
+	case 4:
+		saddle_point(matrix1,r1,c1);
+		break;
+	case 5:
+		y=0;
+		break;
+	default:
+		printf("Enter valid choice\n");
+		break;	
+	}
+	}
+	break;
+case 3:
+	x=0;
+	break;
+default:
+	printf("enter valid choice\n");
+	break;
+}
+}
+}
+
+void ptr_transpose(int *mat,int r,int c)
+{
+int i,j,trans[10][10];
+int *tran;
+
+tran=trans;
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+*(tran+j+10*i)=*(mat+i+10*j);
+}
+}
+
+printf("\nThe transpose of the matrix is:-\n");
+display(tran,r,c);
+}
+
+void ptr_multiplication(int *mat1, int *mat2, int r1, int r2, int c1, int c2)
+{
+int i,j,k,multiply[10][10];
+int *mul;
+
+mul=multiply;
+
+if(c1==r2)
+{
+for(i=0;i<r1;i++)
+{
+
+for(j=0;j<c2;j++)
+{
+
+*(mul+j+10*i)=0;
+
+for(k=0;k<c1;k++)
+{
+ *(mul+j+10*i) = *(mul+j+10*i) + *(mat1+k+10*i) * *(mat2+10*k+j);
+}
+
+}
+
+}
+
+printf("\nThe multiplication of the two matrix is:-\n");
+display(mul,r1,c2);
+
+}
+
+else
+{
+printf("\nMultiplication is not possible!\n");
+}
+	
+}
+
+void ptr_addition(int *mat1, int *mat2, int r1, int r2, int c1, int c2)
+{
+int i,j,add[10][10];
+int *ad;
+
+ad=add;
+
+if(r1==r2 && c1==c2)
+{
+for(i=0;i<r1;i++)
+{
+for(j=0;j<c1;j++)
+{
+*(ad+j+10*i) = *(mat1+j+10*i) + *(mat2+j+10*i);
+}
+}
+
+printf("\nThe addition of the two matrix is:-\n");
+display(ad,r1,c1);
+}
+
+else
+{
+printf("\nAddition is not possible!\n");
+}
+
+
+}
+
+void ptr_accept(int *mat, int r, int c)
+{
+int i,j;
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+printf("\nEnter the element:-\t");
+scanf("%d", mat+j+10*i);
+}
+}
+
+ptr_display(mat,r,c);
+
+}
+
+void ptr_display(int *mat, int r, int c)
+{
+int i,j;
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+printf("%d\t", *(mat+j+10*i));
+}
+printf("\n");
+}	
+}
+
+void saddle_point(int matrix[][10],int r,int c)
+{
+	
+int i,j,k,min[100][3],max,m,c_min;
+
+for(i=0,m=0;i<r;i++,m++)
+{
+min[m][0]=matrix[i][0];
+
+for(j=0;j<c;j++)
+{
+if(min[m][0]>=matrix[i][j])
+{
+
+if(min[m][0]==matrix[i][j] && j!=0)
+{
+m++;
+min[m][0]=matrix[i][j];
+min[m][1]=i;
+min[m][2]=j;
+}
+
+else
+{
+min[m][0]=matrix[i][j];
+min[m][1]=i;
+min[m][2]=j;
+}
+
+}
+}
+}
+
+
+for(i=0;i<m;i++)
+{
+c_min=min[i][2];
+max=matrix[0][c_min];
+
+for(k=0;k<r;k++)
+{
+if(max<=matrix[k][c_min])
+{
+max=matrix[k][c_min];
+}
+}
+
+if(min[i][0]==max)
+{
+printf("\nSaddle point:- %d\nrow:- %d\ncolumn:- %d\n",max,min[i][1],min[i][2]);
+}
+
+}
+
+}
+
+
+void transpose(int matrix[][10],int r,int c)
+{
+int i,j,trans[10][10];
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+trans[i][j]=matrix[j][i];
+}
+}
+
+printf("\nThe transpose of the matrix is:-\n");
+display(trans,r,c);
+
+}
+
+void multiplication(int matrix1[][10], int matrix2[][10], int r1, int r2, int c1, int c2)
+{
+int i,j,k,multiply[10][10];
+
+if(c1==r2)
+{
+for(i=0;i<r1;i++)
+{
+
+for(j=0;j<c2;j++)
+{
+
+multiply[i][j]=0;
+
+for(k=0;k<c1;k++)
+{
+multiply[i][j]=multiply[i][j] + matrix1[i][k] * matrix2[k][j];
+}
+
+}
+
+}
+
+printf("\nThe multiplication of the two matrix is:-\n");
+display(multiply,r1,c2);
+
+}
+
+else
+{
+printf("\nMultiplication is not possible!\n");
+}
+}
+
+void addition(int matrix1[][10], int matrix2[][10], int r1, int r2, int c1, int c2)
+{
+int i,j,add[10][10];
+
+if(r1==r2 && c1==c2)
+{
+for(i=0;i<r1;i++)
+{
+for(j=0;j<c1;j++)
+{
+add[i][j]=matrix1[i][j] + matrix2[i][j];
+}
+}
+
+printf("\nThe addition of the two matrix is:-\n");
+display(add,r1,c1);
+}
+
+else
+{
+printf("\nAddition is not possible!\n");
+}
+
+}
+
+void accept(int matrix[][10],int r,int c)
+{
+int i,j;
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+printf("\nEnter the element:-\t");
+scanf("%d",&matrix[i][j]);
+}
+}
+
+display(matrix,r,c);
+
+}
+
+void display(int matrix[][10],int r,int c)
+{
+int i,j;
+
+for(i=0;i<r;i++)
+{
+for(j=0;j<c;j++)
+{
+printf("%d\t",matrix[i][j]);
+}
+printf("\n");
+}
+}
