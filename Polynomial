@@ -1,0 +1,195 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct node
+{
+int coe;
+int exp;
+struct node *add;
+}node;
+node* insert(node *head,int c,int e);
+node* create();
+void display(node *head);
+node* addition(node *head1,node *head2);
+node* multiplication(node *head1,node *head2);
+int evalution(node *head);
+int power(int x,int exp);
+void main()
+{int ch,result,c;
+node *head1,*head2,*head;
+do
+{
+printf("\n******ENTER YOUR CHOICE****** \n 1.Create & display polynomial-1 \n 2.Create & display polynomial-2 \n 3.Addition \n 4.Multiplication \n 5.Evalution\n 6.Exit \n ");
+scanf("%d",&ch);
+switch(ch)
+{
+	case 1:head1=create();
+		printf("\nfirst Polynomial:\n\t ");
+		display(head1);
+         	break;
+	case 2:head2=create();
+	       printf("\nSecond Polynomial:\n\t ");
+	       display(head2);
+	       break;
+	case 3:head=addition(head1,head2);
+		printf("\nAddition of polynomial are:\n\t");
+		display(head);
+		break;	
+	case 4:head=multiplication(head1,head2);
+		printf("\nMultiplication of polynomial are:\n\t");
+		display(head);
+		break;
+	case 5:printf("Enter no. to perform evalution on polynomial:\n1.First Polynomial\n2.second Polynomial\nEnter choice=");
+		scanf("%d",&c);
+		if(c==1)
+		{
+		result=evalution(head1);
+		printf("\nResult of polynomial=%d",result);
+		}
+		if(c=2)
+		{
+		result=evalution(head2);
+		printf("\nResult of polynomial=%d",result);
+		}
+		break;
+	case 6:printf("\n Have a nice day !! \n");
+               break;
+        default:printf("\n Invalid choice!! Please enter again. \n");
+                break;
+	}
+}while(ch!=6);	
+}
+
+node* create()
+{
+node *head=NULL;
+int i,n,c,e;
+	printf("Enter no. of terms in polynomial=");
+	scanf("%d",&n);
+	for(i=1;i<=n;i++)
+	{
+			printf("Enter coefficent=");
+			scanf("%d",&c);
+			printf("Enter exponent=");
+			scanf("%d",&e);	
+		head=insert(head,c,e);	
+	}
+	return head;
+}
+
+node* insert(node *head,int c,int e)
+{
+ node *p,*q;
+ int flag=0;
+p=(node*)malloc(sizeof(node));
+p->coe=c;
+p->exp=e;
+
+	if(head==NULL)
+	{
+		p->add=p;
+		head=p;
+		flag=1;
+	}
+	
+	if(flag==0)
+	if(head->exp==e)
+	{
+		head->coe=head->coe+c;	
+	}
+	
+	if(head->exp<e)
+	{
+		p->add=head->add;
+		head->add=p;
+		head=p;		
+	}
+	if(head->exp>e)
+	{
+		q=head;
+		while(q->add->exp<=e)
+		q=q->add;
+		if(q->exp==e)
+		{
+			q->coe=q->coe+c;	
+		}
+		else
+		{
+			p->add=q->add;
+			q->add=p;	
+		}
+		
+		}		
+		return head;	
+	
+}
+
+
+void display(node *head)
+{node *p;
+
+	for(p=head->add;p!=head;p=p->add)
+	{
+			printf("%dx^%d+",p->coe,p->exp);	
+	}
+	printf("%dx^%d",p->coe,p->exp);	
+
+}
+
+node* addition(node *head1,node *head2)
+{
+node *head=NULL,*p;
+
+	for(p=head1->add;p!=head1;p=p->add)
+	{
+		head=insert(head,p->coe,p->exp);
+	}
+		head=insert(head,p->coe,p->exp);
+	for(p=head2->add;p!=head2;p=p->add)
+	{
+		head=insert(head,p->coe,p->exp);
+	}
+		head=insert(head,p->coe,p->exp);
+}
+
+node* multiplication(node *head1,node *head2)
+{node *head=NULL,*p,*q;
+
+	for(q=head1->add;q!=head1;q=q->add)
+	{
+			for(p=head2->add;p!=head2;p=p->add)
+			{
+					head=insert(head,q->coe*p->coe,q->exp+p->exp);
+			}
+			head=insert(head,q->coe*p->coe,q->exp+p->exp);
+	}
+	
+	for(p=head2->add;p!=head2;p=p->add)
+			{
+					head=insert(head,q->coe*p->coe,q->exp+p->exp);
+			}
+			head=insert(head,q->coe*p->coe,q->exp+p->exp);
+	
+	return head;
+	
+}
+int evalution(node *head)
+{
+	int x,ans=0;
+	node *p;
+	printf("\nEnter value of x=");
+	scanf("%d",&x);
+	p=head->add;
+	do
+	{
+		ans=ans+(p->coe*power(x,p->exp));
+		p=p->add;	
+	}while(p!=head->add);
+	return ans;
+}
+int power(int x,int exp)
+{
+	int i,result=1;
+	for(i=0;i<exp;i++)
+		result=result*x;
+	return result;
+}
