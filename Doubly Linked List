@@ -1,0 +1,289 @@
+#include<stdio.h>
+#include<stdlib.h>
+typedef struct dnode
+{
+int roll;
+char name[50];
+float marks;
+struct dnode *next;
+struct dnode *prev;
+}dnode;
+dnode *create(int n);
+void display_forward(dnode *head);
+void display_backward(dnode *head);
+dnode *insert_beg(dnode *);
+void insert_end(dnode *);
+void insert_inbet(dnode *,int);
+dnode *delete_beg(dnode *);
+void delete_end(dnode *);
+void delete_inbet(dnode *,int);
+dnode *search(dnode* head);
+void modify(dnode *p);
+
+void main()
+{
+int pos, choice, n;
+dnode *head, *p=NULL;
+do
+{
+printf("\n******ENTER YOUR CHOICE****** \n 1.create datbase \n 2.display datbase \n 3.display backward \n 4.insert \n 5.delete \n 6.search \n 7.modify \n 8.exit \n ");
+scanf("%d", &choice);
+switch(choice)
+{
+case 1: printf("\n enter no. of record in database-");
+scanf("%d", &n);
+head=create(n);
+break;
+case 2:display_forward(head);
+break;
+case 3:display_backward(head);
+break;
+case 4:printf("\n enter the position-");
+scanf("%d", &pos);
+if(pos==n)
+{
+insert_end(head);
+n++;
+display_forward(head);
+}
+else if(pos==1)
+{
+head=insert_beg(head);
+n++;
+display_forward(head);
+}
+else if(pos>1&&pos<n)
+{
+insert_inbet(head,pos);
+n++;
+display_forward(head);
+}
+else
+{
+printf("\n invalid position!! \n");
+}
+break;
+case 5:printf("\n enter the position-");
+scanf("%d", &pos);
+if(pos==n)
+{
+delete_end(head);
+n--;
+display_forward(head);
+}
+else if(pos==1)
+{
+head=delete_beg(head);
+n--;
+display_forward(head);
+}
+else if(pos>1&&pos<n)
+{
+delete_inbet(head,pos);
+n--;
+display_forward(head);
+}
+else
+{
+printf("\n invalid positon!! \n");
+}
+break;
+case 6:p=search(head);
+if(p==NULL)
+printf("\n record not found!! \n");
+else
+{
+printf("\n record present!! details are \n roll\tname\tmarks\n%d\t%s\t%f",p->roll,p->name,p->marks);
+}
+break;
+case 7:p=search(head);
+if(p==NULL)
+{
+printf("\n record not found!! \n");
+}
+else
+{
+printf("\n record present!! details are \n roll\tname\tmarks\n%d\t%s\t%f",p->roll,p->name,p->marks);
+modify(p);
+display_forward(head);
+}
+
+break;
+case 8:printf("\n have a nice day!! \n");
+break;
+default:printf("\ninvalid choice!! please enter again \n");
+break;
+}
+}while(choice!=8);
+}
+
+dnode* create(int n)
+{
+dnode *head=NULL;
+dnode *p, *last;
+int i;
+ for(i=0;i<n;i++)
+ {
+ if(head==NULL)
+ {
+ head=(dnode*)malloc(sizeof (dnode));
+ printf("\nEnter record of head");
+ printf("\nEnter roll no\n");
+ scanf("%d",&head->roll);
+ printf("\nEnter name\n");
+ scanf("%s",head->name);
+ printf("\nEnter marks\n");
+ scanf("%f",&head->marks);
+ head->next=NULL;
+ head->prev=NULL;
+ last=head;
+ }
+ else
+ {
+ p=(dnode*)malloc(sizeof (dnode));
+ printf("\nenter record");
+ printf("\nEnter roll no\n");
+ scanf("%d",&p->roll);
+ printf("\nEnter name\n");
+ scanf("%s",p->name);
+ printf("\nEnter marks\n");
+ scanf("%f",&p->marks);
+ p->next=NULL;
+ last->next=p;
+ p->prev=last;
+ last=last->next;
+ }
+ }
+ return head;
+ }
+ 
+ void display_forward(dnode *head)
+ {
+ dnode *p;
+ printf("\nroll\tname\tmarks");
+ for(p=head;p!=NULL;p=p->next)
+ {
+ printf("\n%d\t%s\t%f",p->roll,p->name,p->marks);
+ }
+ }
+ 
+ void display_backward(dnode *head)
+ {
+ dnode *p;
+ printf("\nroll\tname\tmarks");
+ for(p=head;p->next!=NULL;p=p->next)
+ {
+ }
+ for(;p!=NULL;p=p->prev)
+ {
+ printf("\n%d\t%s\t%f",p->roll,p->name,p->marks);
+ }
+ }
+ 
+ dnode *insert_beg(dnode *head)
+ {
+ dnode *p;
+ p=(dnode*)malloc(sizeof (dnode));
+ printf("\nenter value(roll,name,marks)=");
+ scanf("%d%s%f",&p->roll,p->name,&p->marks);
+ p->next=NULL;
+ p->prev=NULL;
+ p->next=head;
+ head->prev=p;
+ head=p;
+ return head;
+ }
+ 
+ void insert_end(dnode *head)
+ {
+ dnode *p, *q;
+ p=(dnode*)malloc(sizeof (dnode));
+ printf("\nenter value(roll,name,marks)=");
+ scanf("%d%s%f",&p->roll,p->name,&p->marks);
+ p->next=NULL;
+ p->prev=NULL;
+ for(q=head;q->next!=NULL;q=q->next)
+ {
+ }
+ q->next=p;
+ p->prev=q;
+ }
+ 
+ void insert_inbet(dnode *head,int pos)
+ {
+ dnode *p, *q;
+ int i;
+ p=(dnode*)malloc(sizeof (dnode));
+ printf("\nenter value(roll,name,marks)=");
+ scanf("%d%s%f",&p->roll,p->name,&p->marks);
+ p->next=NULL;
+ p->prev=NULL;
+ q=head;
+for(i=1;i<pos-1;i++)
+{
+q=q->next;
+}
+p->next=q->next;
+q->next->prev=p;
+q->next=p;
+p->prev=q;
+}
+
+dnode* delete_beg(dnode *head)
+{
+dnode *q;
+q=head;
+head=head->next;
+head->prev=NULL;
+free(q);
+return head;
+}
+
+void delete_end(dnode *head)
+{
+dnode *p, *q;
+for(q=head;q->next!=NULL;q=q->next)
+{
+}
+p=q->prev;
+p->next=NULL;
+free(q);
+}
+
+void delete_inbet(dnode *head, int pos)
+{
+int i;
+dnode *p, *q;
+p=head;
+for(i=1;i<pos-1;i++)
+{
+p=p->next;
+}
+q=p->next;
+p->next=q->next;
+q->next->prev=p;
+free(q);
+}
+
+dnode* search(dnode* head)
+{
+dnode *q;
+int key;
+dnode* p=NULL;
+printf("\nenter the roll no-");
+scanf("%d", &key);
+for(q=head;q!=NULL;q=q->next)
+{
+if(q->roll==key)
+{
+p=q;
+break;
+}
+}
+return p;
+}
+void modify(dnode *p)
+{
+printf("\nenter value(roll,name,marks)=");
+ scanf("%d%s%f",&p->roll,p->name,&p->marks);
+}
