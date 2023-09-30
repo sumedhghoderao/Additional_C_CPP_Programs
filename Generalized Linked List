@@ -1,0 +1,101 @@
+#include<stdio.h>
+#include<stdlib.h>
+
+typedef struct gll
+{
+int tag;
+union dfield
+{
+int data;
+struct gll *dnext;
+}dfield;
+struct gll *next;
+}node;
+
+node *create(node *head1);
+node *createnode()
+{
+node *newn,*head,*head1,*temp;
+int j,m,tag;
+
+printf("Type what type of node you want to creat(Atomic(0)/LinkedList(1))");
+scanf("%d",&tag);
+
+if(tag==0)
+{
+newn=(node*)malloc(sizeof(node));
+printf("Enter the data :- ");
+newn->tag=tag;
+scanf("%d",&newn->dfield.data);
+newn->next=NULL;
+return newn;
+}
+
+else if(tag==1)
+{
+head=NULL;
+head1=(node*)malloc(sizeof(node));
+head1->tag=tag;
+head1->dfield.dnext=NULL;
+head1->next=NULL;
+head=create(head);
+head1->dfield.dnext=head;
+return head1;
+}
+}
+
+node *create(node *head1)
+{
+node *newn,*temp;
+int i,n,tag;
+printf("How many nodes u want to insert :-  ");
+scanf("%d",&n);
+
+for(i=0;i<n;i++)
+{
+newn=createnode();
+if(head1==NULL)
+{
+head1=newn;
+temp=newn;
+}
+else
+{
+temp->next=newn;
+temp=temp->next;
+}
+}
+return head1;
+}
+
+void display(node *head)
+{
+node *temp=head, *temp1;
+printf("(");
+
+while(temp!=NULL)
+{
+if(temp->tag==1)
+{
+temp1=temp->dfield.dnext;
+display(temp1);
+temp=temp->next;
+}
+else
+{
+printf("%d,",temp->dfield.data);
+temp=temp->next;
+}
+}
+printf("\b),");
+}
+
+void main()
+{
+node *head=NULL;
+head=create(head);
+printf("GL LIST -> "); 
+display(head);
+printf("\b");
+}
+
