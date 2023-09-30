@@ -1,0 +1,176 @@
+#include<stdio.h>
+#include<string.h>
+void accept(char a[10][30],int n);
+void display(char a[10][30],int n);
+void selsort(char a[10][30],int n);
+void bubsort(char a[10][30],int n);
+int bsearch(char a[10][30],char key[10],int low,int high);
+int bsearchr(char a[10][30],char key[10],int low,int high);
+
+void main()
+{
+ char a[10][30],key[10];
+ int ch,n,result;
+ do
+ {
+  printf("\n******ENTER YOUR CHOICE******\n1.Accept string\n2.Display strings\n3.Bubble sort(Ascending order)\n4.Selection sort(Descending order)\n5.Binary search(without recursion)\n6.Binary search(with recursion)\n7.Exit\n");
+ scanf("%d",&ch);
+  
+ switch(ch)
+ {
+  case 1:printf("\nEnter the no of strings\n");
+         scanf("%d",&n);
+         printf("\nEnter the strings\n");
+         accept(a,n);
+         break;
+
+  case 2:display(a,n);
+         break;
+
+  case 3:bubsort(a,n);
+         break;
+
+  case 4:selsort(a,n);
+         break;
+
+  case 5:printf("\nEnter your string\n");
+         scanf("%s",key);
+         bubsort(a,n);
+         result=bsearch(a,key,0,(n-1));
+         if(result==-1)
+         {
+          printf("\nstring is not present\n");
+         }
+         else
+         {
+          printf("\nstring is present\n");
+         }
+         break;
+
+  case 6:printf("\nEnter your string\n");
+         scanf("%s",key);
+         bubsort(a,n);
+         result=bsearch(a,key,0,(n-1));
+         if(result==-1)
+         {
+          printf("\nstring is not present\n");
+         }
+         else
+         {
+          printf("\nstring %s is present",a[result]);
+         }
+         break;
+
+  case 7:printf("\nBye Bye\n");
+         break;
+
+  default:printf("\nEnter valid choice\n");
+          break;
+ }
+ }
+  while(ch!=7);
+}
+
+void accept(char a[10][30],int n)
+{
+ int i;
+ for(i=0;i<n;i++)
+ {
+  scanf("%s",a[i]);
+ }
+}
+
+void display(char a[10][30],int n)
+{
+ int i;
+ for(i=0;i<n;i++)
+ {
+  printf("\t%s",a[i]);
+ }
+}
+
+void selsort(char a[10][30],int n)
+{
+ char temp[20];
+ int i,j,max;
+ for(i=0;i<n-1;i++)
+  {
+   max=i;
+   for(j=i+1;j<n;j++)
+   {
+    if(strcmp(a[j],a[max])>0)
+    {
+     max=j;
+    }
+   }
+ strcpy(temp,a[max]);
+ strcpy(a[max],a[i]);
+ strcpy(a[i],temp);
+ printf("\n");
+ display(a,n);
+ }
+}
+
+void bubsort(char a[10][30],int n)
+{
+ char temp[20];
+ int i,j;
+ for(i=1;i<n;i++)
+ {
+  for(j=0;j<n-1;j++)
+  {
+   if(strcmp(a[j],a[j+1])>0)
+   {
+    strcpy(temp,a[j]);
+    strcpy(a[j],a[j+1]);
+    strcpy(a[j+1],temp);
+   }
+  }
+  printf("\n");
+  display(a,n);
+ }
+}
+
+int bsearch(char a[10][30],char key[10],int low,int high)
+{
+ int mid;
+ while(low<=high)
+ {
+  mid=(low+high)/2;
+  if(strcmp(key,a[mid])==0)
+  {
+   return mid;
+  }
+  else if(strcmp(key,a[mid])<0)
+  {
+   high=mid-1;
+  }
+  else
+  {
+   low=mid+1;
+  }
+ }
+ return -1;
+}
+
+int bsearchr(char a[10][30],char key[10],int low,int high)
+{
+ int mid;
+ if(low<=high)
+ {
+  mid=(low+high)/2;
+  if(strcmp(key,a[mid])==0)
+  {
+   return mid;
+  }
+  else if(strcmp(key,a[mid])<0)
+  {
+   return bsearchr(a,key,low,(mid-1));
+  }
+  else
+  {
+   return bsearchr(a,key,(mid+1),high);
+  }
+ }
+ return -1;
+}
