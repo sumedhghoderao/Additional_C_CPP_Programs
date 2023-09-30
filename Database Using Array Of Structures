@@ -1,0 +1,194 @@
+#include<stdio.h>
+struct employee
+{
+ int empl_id;
+ char firstname[20];
+ char lastname[20];
+ char designation[20];
+ int salary;
+};
+
+void createDB(struct employee e[25],int n);
+void displayDB(struct employee e[25],int n);
+void sort(struct employee e[25],int n);
+int search(struct employee e[25],int n,int k);
+void add(struct employee e[25],int n,int k);
+void delete(struct employee e[25],int n,int r);
+void modify(struct employee e[25],int n,int k,int r);
+
+void main()
+{
+ struct employee e[25];
+ int choice,no,key,result;
+ do
+ {
+  printf("\n Main menu\n1.create database\n2.display database\n3.add record\n4.search record\n5.modify record\n6.delete record\n7.exit\nenter your choice\n");
+  scanf("%d",&choice);
+  switch(choice)
+  {
+   case 1:printf("\nEnter the no of employee:");
+          scanf("%d",&no);
+	      createDB(e,no);
+          break;
+   case 2:sort(e,no);
+          displayDB(e,no);
+          break;
+   case 3:printf("\nenter the employee id");
+          scanf("%d",&key);
+          result=search(e,no,key);
+          if(result<0)
+          {
+           add(e,no,key);
+           no++;
+           printf("\nrecord entered successfully\n");
+           sort(e,no);
+           displayDB(e,no);
+          }
+          else
+          {
+           printf("\nrecord already present\ndeails are:\nempl_i\tfname\tlname\tdesign\tsalary\n%d\t%s\t%s\t%s\t%d\n",e[result].empl_id,e[result].firstname,e[result].lastname,e[result].designation,e[result].salary);
+          }
+          break;
+   case 4:printf("\nenter the employee id you want to search:");
+          scanf("%d",&key);
+          result=search(e,no,key);
+          if(result<0)
+          {
+           printf("\nthe record of employee_id '%d' is not present\n",key);
+          }
+          else
+          {
+           printf("\nrecord persent\ndetails are\nempl_id\tfname\tlname\tdesign\tsalary\n%d\t%s\t%s\t%s\t%d\n",e[result].empl_id,e[result].firstname,e[result].lastname,e[result].designation,e[result].salary);
+          }
+          break;
+   case 5:printf("\nenter the employee id you want to modify:");
+          scanf("%d",&key);
+          result=search(e,no,key);
+          if(result<0)
+          {
+           printf("\nthe record of employee_id '%d' is not present\nmodification is not possible\n",key); 
+          }
+          else
+          {
+           printf("\nrecord persent\ndetails are\nempl_id\tfname\tlname\tdesign\tsalary\n%d\t%s\t%s\t%s\t%d\n",e[result].empl_id,e[result].firstname,e[result].lastname,e[result].designation,e[result].salary);
+          modify(e,no,key,result);
+           printf("\nData modified\nnew details are-\nempl_id\tfname\tlname\tdesign\tsalary\n%d\t%s\t%s\t%s\t%d\n",e[result].empl_id,e[result].firstname,e[result].lastname,e[result].designation,e[result].salary);
+          }
+          break;
+   case 6:printf("\nenter the employee id you want to delete:");
+          scanf("%d",&key);
+          result=search(e,no,key);
+          if(result<0)
+          {
+           printf("\nthe record of employee_id '%d' is not present\ndeletion is not possible\n",key); 
+          }
+          else
+          {
+           delete(e,no,result);
+           no--;
+           printf("\ndeletion of record successful\n");
+           sort(e,no);
+           displayDB(e,no);
+          }
+          break;
+   case 7:printf("have a nice day");
+          break;
+   default:printf("\nenter valid choice\n");
+           break;
+  }
+}while(choice!=7);
+}
+
+void createDB(struct employee e[25],int n)
+{
+ int i;
+ for(i=0;i<n;i++)
+ {
+  printf("\nenter details of the employee\nenter employee ID no:");
+  scanf("%d",&e[i].empl_id);
+  printf("\nenter employee's first name:");
+  scanf("%s",e[i].firstname);
+  printf("enter employee's last name:");
+  scanf("%s",e[i].lastname);
+  printf("enter employee's designation:");
+  scanf("%s",e[i].designation); 
+  printf("enter employee's salary:");
+  scanf("%d",&e[i].salary);
+ }
+} 
+
+void displayDB(struct employee e[25],int n)
+{
+ int i;
+ printf("\t\temployee databse\nempl_id\tfname\tlname\tdesignation\tsalary");
+ for(i=0;i<n;i++)
+ {
+  printf("\n%d\t%s\t%s\t%s\t\t%d",e[i].empl_id,e[i].firstname,e[i].lastname,e[i].designation,e[i].salary);
+ }
+}
+
+int search(struct employee e[25],int n,int k)
+{
+ int i,pos=-1;
+ for(i=0;i<n;i++)
+ {
+  if(e[i].empl_id==k)
+  {
+   pos=i;
+   break;
+  }
+ }
+ return pos;
+}
+
+void add(struct employee e[25],int n,int k)
+{
+ e[n].empl_id=k;
+ printf("\nenter details of the employee\nenter employee's first name:");
+ scanf("%s",e[n].firstname);
+ printf("enter employee's last name:");
+ scanf("%s",e[n].lastname);
+ printf("enter employee's designation:");
+ scanf("%s",e[n].designation); 
+ printf("enter employee's salary:");
+ scanf("%d",&e[n].salary); 
+}
+
+void delete(struct employee e[25],int n,int r)
+{
+ int i;
+ for(i=r;r<n-1;i++)
+ {
+  e[i]=e[i+1];
+ }
+}
+
+void sort(struct employee e[25],int n)
+{
+ struct employee temp;
+ int i,j;
+ for(i=1;i<n;i++)
+ {
+  for(j=0;j<n-1;j++)
+  {
+   if(e[j].empl_id>e[j+1].empl_id)
+   {
+    temp=e[j];
+    e[j]=e[j+1];
+    e[j+1]=temp;
+   }
+  }
+ }
+}
+
+void modify(struct employee e[25],int n,int k,int r)
+{
+ printf("\nenter new details of the employee with employee id '%d' \nenter employee's first name:",k);
+ scanf("%s",e[r].firstname);
+ printf("enter employee's last name:");
+ scanf("%s",e[r].lastname);
+ printf("enter employee's designation:");
+ scanf("%s",e[r].designation); 
+ printf("enter employee's salary:");
+ scanf("%d",&e[r].salary); 
+}
